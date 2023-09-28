@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: geetogether-client-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: geetogether-client
+  template:
+    metadata:
+      labels:
+        app: geetogether-client
+    spec:
+      containers:
+        - name: geetogether-client
+          image: 594leonhuang/geetogether-client
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: geetogether-client-srv
+spec:
+  selector:
+    app: geetogether-client
+  ports:
+    - name: geetogether-client-port
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

@@ -1,0 +1,103 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      # - ./infra/k8s/* #把/infra/k8s/資料夾裡的所有.yaml檔用 kubectl 給部署進去
+      #以下為手動部署的先後順序，讓MQ跟Mongodb先啟動，接著才啟動我的微服務，最後才啟動前端網頁
+      - ./infra/k8s/geetogether-ingress-srv.yaml
+      - ./infra/k8s/geetogether-auth-mongo-depl.yaml
+      - ./infra/k8s/geetogether-profiles-mongo-depl.yaml
+      - ./infra/k8s/geetogether-posts-mongo-depl.yaml
+      - ./infra/k8s/geetogether-follows-mongo-depl.yaml
+      - ./infra/k8s/geetogether-forum-mongo-depl.yaml
+      - ./infra/k8s/geetogether-timelines-mongo-depl.yaml
+      - ./infra/k8s/geetogether-expiration-redis-depl.yaml
+      - ./infra/k8s/geetogether-follows-redis-depl.yaml
+      - ./infra/k8s/geetogether-timelines-redis-depl.yaml
+      - ./infra/k8s/geetogether-auth-depl.yaml
+      - ./infra/k8s/geetogether-pictures-depl.yaml
+      - ./infra/k8s/geetogether-profiles-depl.yaml
+      - ./infra/k8s/geetogether-posts-depl.yaml
+      - ./infra/k8s/geetogether-expiration-depl.yaml
+      - ./infra/k8s/geetogether-follows-depl.yaml
+      - ./infra/k8s/geetogether-forum-depl.yaml
+      - ./infra/k8s/geetogether-timelines-depl.yaml
+      - ./infra/k8s/geetogether-client-depl.yaml
+
+build:
+  local:
+    push: false #每當我們更改or重建映像檔image，Scaffold預設會將其推送到docker hub，這邊我們設為'false'不要自動推送
+  artifacts:
+    - image: 594leonhuang/geetogether-auth
+      context: auth #程式所在資料夾
+      docker:
+        dockerfile: Dockerfile
+      sync: #同步，Skaffold 支持會將更改後的文件複製到已部署的容器
+        manual: #手動同步設置
+          - src: 'src/**/*.ts'
+            dest: . # 目標映像檔的路徑，'.'是相對路徑，指在容器中<WORKDIR>，src檔案複製到dest的<WORKDIR>/src/**/*.ts
+    - image: 594leonhuang/geetogether-client
+      context: client 
+      docker:
+        dockerfile: Dockerfile
+      sync: 
+        manual: 
+          - src: '**/*.js'
+            dest: . 
+    - image: 594leonhuang/geetogether-profiles
+      context: profiles
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: 594leonhuang/geetogether-pictures
+      context: pictures
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: 594leonhuang/geetogether-posts
+      context: posts
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: 594leonhuang/geetogether-expiration
+      context: expiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: 594leonhuang/geetogether-forum
+      context: forum
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: 594leonhuang/geetogether-follows
+      context: follows
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: 594leonhuang/geetogether-timelines
+      context: timelines
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .

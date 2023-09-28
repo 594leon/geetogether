@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: geetogether-auth-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: geetogether-auth
+  template:
+    metadata:
+      labels:
+        app: geetogether-auth
+    spec:
+      containers:
+        - name: geetogether-auth
+          image: 594leonhuang/geetogether-auth
+          env:
+            - name: MONGO_URI
+              value: "mongodb://geetogether-auth-mongo-srv:27017"
+            - name: MONGO_DB_NAME
+              value: "auth"
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: RABBIT_HOST
+              value: "hello-world"
+            - name: RABBIT_PORT
+              value: "5672"
+            - name: RABBIT_QUEUE
+              value: "auth"
+            - name: RABBIT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: hello-world-default-user
+                  key: username
+            - name: RABBIT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hello-world-default-user
+                  key: password
+            - name: RABBIT_SECRET
+              value: "hello-world-default-user"
+            - name: K8S_NAMESPACE
+              value: "default"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: geetogether-auth-srv
+spec:
+  selector:
+    app: geetogether-auth
+  type: ClusterIP
+  ports:
+    - name: geetogether-auth-port
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

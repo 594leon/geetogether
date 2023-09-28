@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: geetogether-timelines-redis-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: geetogether-timelines-redis
+  template:
+    metadata:
+      labels:
+        app: geetogether-timelines-redis
+    spec:
+      containers:
+        - name: geetogether-timelines-redis
+          image: redis #redis官方image, 可以在https://hub.docker.com/查尋redis查看image詳情
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: geetogether-timelines-redis-srv
+spec:
+  selector:
+    app: geetogether-timelines-redis
+  ports:
+    - name: geetogether-timelines-redis-port
+      protocol: TCP
+      port: 6379 
+      targetPort: 6379 #6379是redis預設監聽port

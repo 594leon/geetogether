@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: geetogether-follows-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: geetogether-follows
+  template:
+    metadata:
+      labels:
+        app: geetogether-follows
+    spec:
+      containers:
+        - name: geetogether-follows
+          image: 594leonhuang/geetogether-follows
+          env:
+            - name: MONGO_URI
+              value: "mongodb://geetogether-follows-mongo-srv:27017"
+            - name: MONGO_DB_NAME
+              value: "follows"
+            - name: RABBIT_HOST
+              value: "hello-world"
+            - name: RABBIT_PORT
+              value: "5672"
+            - name: RABBIT_QUEUE
+              value: "follows"
+            - name: RABBIT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: hello-world-default-user
+                  key: username
+            - name: RABBIT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hello-world-default-user
+                  key: password
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: RABBIT_SECRET
+              value: "hello-world-default-user"
+            - name: K8S_NAMESPACE
+              value: "default"
+            - name: REDIS_HOST
+              value: "geetogether-follows-redis-srv"
+            - name: REDIS_PORT
+              value: "6379"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: geetogether-follows-srv
+spec:
+  selector:
+    app: geetogether-follows
+  type: ClusterIP
+  ports:
+    - name: geetogether-follows-port
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

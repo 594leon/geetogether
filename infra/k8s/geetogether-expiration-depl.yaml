@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: geetogether-expiration-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: geetogether-expiration
+  template:
+    metadata:
+      labels:
+        app: geetogether-expiration
+    spec:
+      containers:
+        - name: geetogether-expiration
+          image: 594leonhuang/geetogether-expiration
+          env:
+            - name: RABBIT_HOST
+              value: 'hello-world'
+            - name: RABBIT_PORT
+              value: '5672'
+            - name: RABBIT_QUEUE
+              value: 'expiration' 
+            - name: RABBIT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: hello-world-default-user
+                  key: username
+            - name: RABBIT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hello-world-default-user
+                  key: password
+            - name: RABBIT_SECRET
+              value: 'hello-world-default-user' 
+            - name: K8S_NAMESPACE
+              value: 'default' 
+            - name: REDIS_HOST
+              value: geetogether-expiration-redis-srv

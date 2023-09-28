@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: geetogether-profiles-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: geetogether-profiles-mongo
+  template:
+    metadata:
+      labels:
+        app: geetogether-profiles-mongo
+    spec:
+      containers:
+        - name: geetogether-profiles-mongo
+          image: mongo #mongo官方image, 可以在dockhub查尋mongo查看image詳情
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: geetogether-profiles-mongo-srv
+spec:
+  selector:
+    app: geetogether-profiles-mongo
+  ports:
+    - name: geetogether-profiles-db-port
+      protocol: TCP
+      port: 27017 
+      targetPort: 27017 #27017是mongoDB預設監聽port

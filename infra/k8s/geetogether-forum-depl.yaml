@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: geetogether-forum-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: geetogether-forum
+  template:
+    metadata:
+      labels:
+        app: geetogether-forum
+    spec:
+      containers:
+        - name: geetogether-forum
+          image: 594leonhuang/geetogether-forum
+          env:
+            - name: MONGO_URI
+              value: "mongodb://geetogether-forum-mongo-srv:27017"
+            - name: MONGO_DB_NAME
+              value: "forum"
+            - name: RABBIT_HOST
+              value: "hello-world"
+            - name: RABBIT_PORT
+              value: "5672"
+            - name: RABBIT_QUEUE
+              value: "forum"
+            - name: RABBIT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: hello-world-default-user
+                  key: username
+            - name: RABBIT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hello-world-default-user
+                  key: password
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: RABBIT_SECRET
+              value: "hello-world-default-user"
+            - name: K8S_NAMESPACE
+              value: "default"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: geetogether-forum-srv
+spec:
+  selector:
+    app: geetogether-forum
+  type: ClusterIP
+  ports:
+    - name: geetogether-forum-port
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

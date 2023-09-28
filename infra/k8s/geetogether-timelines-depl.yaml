@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: geetogether-timelines-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: geetogether-timelines
+  template:
+    metadata:
+      labels:
+        app: geetogether-timelines
+    spec:
+      containers:
+        - name: geetogether-timelines
+          image: 594leonhuang/geetogether-timelines
+          env:
+            - name: MONGO_URI
+              value: "mongodb://geetogether-timelines-mongo-srv:27017"
+            - name: MONGO_DB_NAME
+              value: "timelines"
+            - name: RABBIT_HOST
+              value: "hello-world"
+            - name: RABBIT_PORT
+              value: "5672"
+            - name: RABBIT_QUEUE
+              value: "timelines"
+            - name: RABBIT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: hello-world-default-user
+                  key: username
+            - name: RABBIT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hello-world-default-user
+                  key: password
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: RABBIT_SECRET
+              value: "hello-world-default-user"
+            - name: K8S_NAMESPACE
+              value: "default"
+            - name: REDIS_HOST
+              value: "geetogether-timelines-redis-srv"
+            - name: REDIS_PORT
+              value: "6379"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: geetogether-timelines-srv
+spec:
+  selector:
+    app: geetogether-timelines
+  type: ClusterIP
+  ports:
+    - name: geetogether-timelines-port
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: geetogether-timelines-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: geetogether-timelines-mongo
+  template:
+    metadata:
+      labels:
+        app: geetogether-timelines-mongo
+    spec:
+      containers:
+        - name: geetogether-timelines-mongo
+          image: mongo #mongo官方image, 可以在dockhub查尋mongo查看image詳情
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: geetogether-timelines-mongo-srv
+spec:
+  selector:
+    app: geetogether-timelines-mongo
+  ports:
+    - name: geetogether-timelines-db-port
+      protocol: TCP
+      port: 27017 
+      targetPort: 27017 #27017是mongoDB預設監聽port

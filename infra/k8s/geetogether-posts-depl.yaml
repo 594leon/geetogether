@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: geetogether-posts-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: geetogether-posts
+  template:
+    metadata:
+      labels:
+        app: geetogether-posts
+    spec:
+      containers:
+        - name: geetogether-posts
+          image: 594leonhuang/geetogether-posts
+          env:
+            - name: MONGO_URI
+              value: 'mongodb://geetogether-posts-mongo-srv:27017'
+            - name: MONGO_DB_NAME
+              value: 'posts'
+            - name: RABBIT_HOST
+              value: 'hello-world'
+            - name: RABBIT_PORT
+              value: '5672'
+            - name: RABBIT_QUEUE
+              value: 'posts' 
+            - name: RABBIT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: hello-world-default-user
+                  key: username
+            - name: RABBIT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hello-world-default-user
+                  key: password
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: RABBIT_SECRET
+              value: "hello-world-default-user"
+            - name: K8S_NAMESPACE
+              value: "default"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: geetogether-posts-srv
+spec:
+  selector:
+    app: geetogether-posts
+  type: ClusterIP
+  ports:
+    - name: geetogether-posts-port
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
