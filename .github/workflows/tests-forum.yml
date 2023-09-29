@@ -2,6 +2,8 @@ name: tests-forum
 
 on:
   pull_request:
+    paths:
+      - 'forum/**'
    
 jobs:
   build:

@@ -2,6 +2,8 @@ name: tests-timelines
 
 on:
   pull_request:
+    paths:
+      - 'timelines/**'
    
 jobs:
   build:

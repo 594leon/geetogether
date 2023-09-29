@@ -2,6 +2,8 @@ name: tests-profiles
 
 on:
   pull_request:
+    paths:
+      - 'profiles/**'
    
 jobs:
   build:

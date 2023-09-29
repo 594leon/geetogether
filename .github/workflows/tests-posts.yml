@@ -2,6 +2,8 @@ name: tests-posts
 
 on:
   pull_request:
+    paths:
+      - 'posts/**'
    
 jobs:
   build:

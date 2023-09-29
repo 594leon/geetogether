@@ -2,6 +2,8 @@ name: tests-pictures
 
 on:
   pull_request:
+    paths:
+      - 'pictures/**'
    
 jobs:
   build:
