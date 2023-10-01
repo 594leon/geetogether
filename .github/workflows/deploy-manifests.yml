@@ -1,4 +1,4 @@
-name: 'Deploy Manifests to GKE'
+name: Deploy Manifests to GKE
 
 on:
   push:
