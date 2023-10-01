@@ -15,11 +15,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: 'Authenticate to Google Cloud'
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v1'
       with:
         credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' # 從 GitHub 機密中提取 GCP 服務帳戶的 JSON 金鑰
 
+     # Install gcloud, `setup-gcloud` automatically picks up authentication from `auth`
     - name: Setup Google Cloud SDK
       uses: 'google-github-actions/setup-gcloud@v1'
 
