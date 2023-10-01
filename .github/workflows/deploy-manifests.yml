@@ -15,12 +15,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Setup Google Cloud SDK
-      uses: google-github-actions/setup-gcloud@v0.2.0
+    - name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
       with:
-        service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-        project_id: 'geetogether-gcproj'
-        export_default_credentials: true
+        credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+    - name: Setup Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
 
     - name: Configure kubectl context
       run: gcloud container clusters get-credentials geetogether-cluster --zone asia-east1 --project geetogether-gcproj
