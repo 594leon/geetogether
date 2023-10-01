@@ -25,4 +25,6 @@ jobs:
       run: gcloud container clusters get-credentials geetogether-cluster --zone asia-east1 --project geetogether-gcproj #你的-gke-叢集名稱 --zone 你的-gke-區域 --project 你的-gcp-專案-id
 
     - name: Deploy to GKE
-      run: kubectl apply -f infra/k8s
+      run: |
+        kubectl apply -f infra/k8s
+        kubectl apply -f infra/k8s-prod
