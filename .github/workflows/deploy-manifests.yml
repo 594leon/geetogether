@@ -1,0 +1,28 @@
+name: 'Deploy Manifests to GKE'
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'infra/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@master
+      with:
+        version: 'latest'  # 使用最新版本的 Google Cloud SDK
+        service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }} # 從 GitHub 機密中提取 GCP 服務帳戶的 JSON 金鑰
+
+    - name: Configure kubectl context
+      run: gcloud container clusters get-credentials geetogether-cluster --zone asia-east1 --project geetogether-gcproj #你的-gke-叢集名稱 --zone 你的-gke-區域 --project 你的-gcp-專案-id
+
+    - name: Deploy to GKE
+      run: kubectl apply -f infra/k8s
