@@ -13,7 +13,7 @@ const sginupRoute = (accountService = getAccountService(), messageService = getM
     router.post('/api/auth/signup', validateBody(
         Joi.object({
             email: Joi.string().email().required(),
-            password: Joi.string().required().trim().min(3).max(10)
+            password: Joi.string().required().trim().min(3).max(20)
         })
     ), async (ctx) => {
 

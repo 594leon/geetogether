@@ -14,7 +14,7 @@ const signinRoute = (accountService = getAccountService(), messageService = getM
     router.post('/api/auth/signin', validateBody(
         Joi.object({
             email: Joi.string().email().required(),
-            password: Joi.string().required().trim().min(3).max(10)
+            password: Joi.string().required().trim().min(3).max(20)
         })
     ), async (ctx) => {
         const { email, password } = ctx.request.body;
