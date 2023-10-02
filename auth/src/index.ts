@@ -3,6 +3,8 @@ import { app, initApp } from './app';
 import Config from './config';
 
 const start = async () => {
+    console.log('Starting up...');
+    
     if (!process.env.MONGO_URI) {
         throw new Error('MONGO_URI must be defined');
     }
