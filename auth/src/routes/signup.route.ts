@@ -25,7 +25,7 @@ const sginupRoute = (accountService = getAccountService(), messageService = getM
             throw new BadRequestError('Email in use');
         }
 
-        //註冊geetogether帳號都要使用CLIENT_SIGNUP_PASSWORD內的密碼，防止上線環境被惡意大量建帳號
+        //註冊geetogether帳號都要使用CLIENT_SIGNUP_PASSWORD內的密碼，防止上線環境被惡意大量建帳號.
         if(CLIENT_SIGNUP_PASSWORD !== password){
             throw new BadRequestError('Registration is not open to general users!');
         }
