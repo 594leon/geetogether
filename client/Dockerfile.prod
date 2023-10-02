@@ -5,10 +5,9 @@ FROM node:alpine
 WORKDIR /app
 
 # 複製 package.json 和 package-lock.json 並安裝依賴項
-COPY package*.json ./
+COPY package.json .
 
-#-only=prod: prod是指production 意思為只安裝package.json的dependencies裡的套件，忽略devDependencies裡的套件.
-RUN npm install -only=prod
+RUN npm install
 
 COPY . .
 
