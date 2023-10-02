@@ -3,11 +3,11 @@ import Config from '../config';
 import { currentUser } from '@serjin/common';
 import { getAccountService } from '../service-injection';
 
-const validateTokenRoute = (accountService = getAccountService()) => {
+const validateTokenRoute = (accountService = getAccountService(), JWT_KEY = Config.JWT_KEY) => {
 
     const router = new Router();
 
-    router.get('/api/auth/validate', currentUser(Config.JWT_KEY), async (ctx) => {
+    router.get('/api/auth/validate', currentUser(JWT_KEY), async (ctx) => {
 
         let accountId: string | null = null;
         if (ctx.request.currentUser) {

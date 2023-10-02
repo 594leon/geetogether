@@ -43,6 +43,10 @@ const start = async () => {
         throw new Error('JWT_KEY must be defined');
     }
 
+    if (!process.env.CLIENT_SIGNUP_PASSWORD) {
+        throw new Error('CLIENT_SIGNUP_PASSWORD must be defined');
+    }
+
     Config.MONGO_URI = process.env.MONGO_URI;
     Config.MONGO_DB_NAME = process.env.MONGO_DB_NAME;
     Config.RABBIT_HOST = process.env.RABBIT_HOST;
@@ -53,6 +57,7 @@ const start = async () => {
     Config.RABBIT_SECRET = process.env.RABBIT_SECRET;
     Config.K8S_NAMESPACE = process.env.K8S_NAMESPACE;
     Config.JWT_KEY = process.env.JWT_KEY;
+    Config.CLIENT_SIGNUP_PASSWORD = process.env.CLIENT_SIGNUP_PASSWORD;
 
     await serviceInjection.initService();
 
