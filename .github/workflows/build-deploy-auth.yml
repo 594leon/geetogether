@@ -29,13 +29,13 @@ jobs:
       - name: Build the Docker image
         run: | 
           cd auth
-          docker build -t 594leonhuang/geetogether-auth:${{ github.sha }} -f Dockerfile.prod .
+          docker build -t 594leonhuang/geetogether-auth -f Dockerfile.prod .
           
       - name: Push the Docker image
         run: | 
           cd auth
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker push 594leonhuang/geetogether-auth:${{ github.sha }}
+          docker push 594leonhuang/geetogether-auth
 
       - name: Auth to GKE
         uses: 'google-github-actions/auth@v0'

@@ -1,0 +1,35 @@
+{
+  "name": "@serjin/common",
+  "version": "1.0.82",
+  "description": "",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "files": [
+    "build/**/*"
+  ],
+  "scripts": {
+    "clean": "del .\\build\\*",
+    "build": "npm run clean && tsc",
+    "pub": "git add . && git commit -m \"Updates\" && npm version patch && npm run build && npm publish"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "del-cli": "^5.0.0",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@kubernetes/client-node": "^0.18.1",
+    "@types/amqplib": "^0.10.1",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/koa": "^2.13.6",
+    "amqplib": "^0.10.3",
+    "ioredis": "^5.3.2",
+    "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.0",
+    "koa": "^2.14.2",
+    "koa-body": "^6.0.1",
+    "mongodb": "^5.6.0"
+  }
+}
