@@ -1,7 +1,9 @@
 name: Build and Deploy Auth
 
 on:
-  pull_request:
+  push:
+    branches:
+      - master
     paths:
       - 'auth/**'
 
@@ -15,7 +17,7 @@ jobs:
           node-version: 16
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build TypeScript
         run: npm run build
