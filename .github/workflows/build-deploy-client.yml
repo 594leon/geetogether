@@ -1,0 +1,53 @@
+name: Build and Deploy Client
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'client/**'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: |
+          cd client
+          npm install
+
+      - name: Build TypeScript
+        run: |
+          cd client
+          npm run build
+
+      - name: Build the Docker image
+        run: | 
+          cd client
+          docker build -t 594leonhuang/geetogether-client:${{ github.sha }} -f Dockerfile.prod .
+          
+      - name: Push the Docker image
+        run: | 
+          cd client
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker push 594leonhuang/geetogether-client:${{ github.sha }}
+
+      - name: Auth to GKE
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+
+       # Get the GKE credentials so we can deploy to the cluster
+      - name: Set up GKE credentials
+        uses: google-github-actions/get-gke-credentials@v0
+        with:
+          cluster_name: 'geetogether-cluster'
+          location: 'asia-east1'
+          
+      - name: Deploy to GKE
+        run: kubectl rollout restart deployment geetogether-client-depl
