@@ -9,6 +9,7 @@ export default class Config {
     private static _RABBIT_SECRET: string;
     private static _K8S_NAMESPACE: string;
     private static _JWT_KEY: string;
+    private static _CLIENT_SIGNUP_PASSWORD: string;
 
     public static get MONGO_URI(): string {
         return Config._MONGO_URI;
@@ -81,5 +82,12 @@ export default class Config {
 
     public static set JWT_KEY(value: string) {
         Config._JWT_KEY = value;
+    }
+
+    public static get CLIENT_SIGNUP_PASSWORD(): string {
+        return Config._CLIENT_SIGNUP_PASSWORD;
+    }
+    public static set CLIENT_SIGNUP_PASSWORD(value: string) {
+        Config._CLIENT_SIGNUP_PASSWORD = value;
     }
 }

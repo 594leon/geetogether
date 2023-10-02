@@ -1,0 +1,13 @@
+name: tests-posts
+
+on:
+  pull_request:
+    paths:
+      - 'posts/**'
+   
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: cd posts && npm install && npm run test:ci

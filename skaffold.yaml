@@ -5,7 +5,7 @@ deploy:
     manifests:
       # - ./infra/k8s/* #把/infra/k8s/資料夾裡的所有.yaml檔用 kubectl 給部署進去
       #以下為手動部署的先後順序，讓MQ跟Mongodb先啟動，接著才啟動我的微服務，最後才啟動前端網頁
-      - ./infra/k8s/geetogether-ingress-srv.yaml
+      - ./infra/k8s-dev/geetogether-ingress-srv.yaml
       - ./infra/k8s/geetogether-auth-mongo-depl.yaml
       - ./infra/k8s/geetogether-profiles-mongo-depl.yaml
       - ./infra/k8s/geetogether-posts-mongo-depl.yaml

@@ -25,6 +25,11 @@ spec:
                 secretKeyRef:
                   name: jwt-secret
                   key: JWT_KEY
+            - name: CLIENT_SIGNUP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: client-signup-pwd-secret
+                  key: CLIENT_SIGNUP_PASSWORD
             - name: RABBIT_HOST
               value: "hello-world"
             - name: RABBIT_PORT
