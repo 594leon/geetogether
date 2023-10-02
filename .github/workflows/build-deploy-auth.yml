@@ -22,14 +22,18 @@ jobs:
           npm install
 
       - name: Build TypeScript
-        run: npm run build
+        run: |
+          cd auth
+          npm run build
 
       - name: Build the Docker image
         run: | 
+          cd auth
           docker build -t 594leonhuang/geetogether-auth:${{ github.sha }} -f Dockerfile.prod .
           
       - name: Push the Docker image
         run: | 
+          cd auth
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker push 594leonhuang/geetogether-auth:${{ github.sha }}
 
