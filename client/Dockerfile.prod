@@ -4,7 +4,7 @@ FROM node:alpine
 # 設置工作目錄
 WORKDIR /app
 
-# 複製 package.json 和 package-lock.json 並安裝依賴項
+# 複製 package.json 和 package-lock.json 並安裝依賴項.
 COPY package.json .
 
 RUN npm install

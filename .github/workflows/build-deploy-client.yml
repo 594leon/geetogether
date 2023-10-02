@@ -16,13 +16,13 @@ jobs:
       - name: Build the Docker image
         run: | 
           cd client
-          docker build -t 594leonhuang/geetogether-client:${{ github.sha }} -f Dockerfile.prod .
+          docker build -t 594leonhuang/geetogether-client -f Dockerfile.prod .
           
       - name: Push the Docker image
         run: | 
           cd client
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker push 594leonhuang/geetogether-client:${{ github.sha }}
+          docker push 594leonhuang/geetogether-client
 
       - name: Auth to GKE
         uses: 'google-github-actions/auth@v0'
