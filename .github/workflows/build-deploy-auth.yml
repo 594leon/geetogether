@@ -1,0 +1,25 @@
+name: Build and Deploy Auth
+
+on:
+  pull_request:
+    paths:
+      - 'auth/**'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build TypeScript
+        run: npm run build
+
+      
+
+
