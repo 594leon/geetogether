@@ -7,7 +7,7 @@ import Config from '../config';
 import { signJWT } from '../utilities/jwt-tool';
 import { AccountCreatedPublisher } from "../events/publishers/account-created-publisher";
 
-const sginupRoute = (accountService = getAccountService(), messageService = getMessageService(),CLIENT_SIGNUP_PASSWORD = Config.CLIENT_SIGNUP_PASSWORD) => {
+const sginupRoute = (accountService = getAccountService(), messageService = getMessageService(), CLIENT_SIGNUP_PASSWORD = Config.CLIENT_SIGNUP_PASSWORD) => {
     const router = new Router();
 
     router.post('/api/auth/signup', validateBody(
@@ -25,9 +25,13 @@ const sginupRoute = (accountService = getAccountService(), messageService = getM
             throw new BadRequestError('Email in use');
         }
 
-        //註冊geetogether帳號都要使用CLIENT_SIGNUP_PASSWORD內的密碼，防止上線環境被惡意大量建帳號.
-        if(CLIENT_SIGNUP_PASSWORD !== password){
-            throw new BadRequestError('Registration is not open to general users!');
+        //提供帳密account: guest1-9@gee.com9 / pwd: guest1-9 等9組帳號給外面測試
+        if (!email.match(/^guest[1-9]@gee.com$/) || !password.match(/^guest[1-9]$/)) {
+
+            //另外提供CLIENT_SIGNUP_PASSWORD內的密碼來建立帳號，給我自已測試用
+            if (CLIENT_SIGNUP_PASSWORD !== password) {
+                throw new BadRequestError('Registration is not open to general users!');
+            }
         }
 
         const hashedPassword = await Password.toHash(password);
