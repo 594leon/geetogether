@@ -109,10 +109,14 @@ const PostPage = () => {
                             Authorization: `Bearer ${localStorage.getItem('gee-token')}`,
                         },
                     });
-                    setRoom(response.data.room);
-                    setIsOpenRoom(true);
+                    if (response.data.room !== null) {
+                        setRoom(response.data.room);
+                        setIsOpenRoom(true);
+                    }
+
                 } catch (error) {
-                    setIsEnrolled(false);
+                    console.error('查詢room時發生錯誤:', error);
+                    showAlert(error, true);
                 }
             };
             fetchRoom();

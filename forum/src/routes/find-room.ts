@@ -12,15 +12,14 @@ const findRoomRoute = (roomService = getRoomService()) => {
 
         const room = await roomService.findByPostId(postId);
 
-        if (!room) {
-            throw new BadRequestError('Room not found!');
-        }
+        if (room) {
+            const memberAccountIds = await roomService.getAccountIdsByRoomId(room.id);
 
-        const memberAccountIds = await roomService.getAccountIdsByRoomId(room.id);
+            //只有Room成員才能查詢Room資訊
+            if (!memberAccountIds.includes(accountId)) {
+                throw new BadRequestError('You are not a member!');
+            }
 
-        //只有Room成員才能查詢Room資訊
-        if (!memberAccountIds.includes(accountId)) {
-            throw new BadRequestError('You are not a member!');
         }
 
         ctx.status = 201;
