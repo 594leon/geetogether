@@ -25,8 +25,8 @@ const sginupRoute = (accountService = getAccountService(), messageService = getM
             throw new BadRequestError('Email in use');
         }
 
-        //提供帳密account: guest00-99@gee.com9 / pwd: guest00-99 等9組帳號給外面測試
-        if (!email.match(/^guest[0-9][0-9]@gee.com$/) || !password.match(/^guest[0-9][0-9]$/)) {
+        //提供帳密account: guest00-99@gee.com9 / pwd: guest 等100組帳號給外面測試
+        if (!email.match(/^guest[0-9][0-9]@gee.com$/) || !password.match('guest')) {
 
             //另外提供CLIENT_SIGNUP_PASSWORD內的密碼來建立帳號，給我自已測試用
             if (CLIENT_SIGNUP_PASSWORD !== password) {
